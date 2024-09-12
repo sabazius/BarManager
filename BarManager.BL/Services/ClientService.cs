@@ -21,31 +21,34 @@ namespace BarManager.BL.Services
             _logger = logger;
         }
 
-        public Client Create(Client client)
+        public async Task<Client> Create(Client client)
         {
-            var index = _clientRepository.GetAll().OrderByDescending(x => x.Id).FirstOrDefault()?.Id;
-            client.Id = (int)(index != null ? index + 1 : 1);
-            return _clientRepository.Create(client);
+            var result = await _clientRepository.GetAll();
+
+            var index = result.OrderByDescending(x => x.Id).FirstOrDefault()?.Id;
+            
+            client.Id = (int) (index != null ? index + 1 : 1);
+            return await _clientRepository.Create(client);
         }
 
-        public Client Update(Client client)
+        public async Task <Client> Update(Client client)
         {
-            return _clientRepository.Update(client);
+            return await _clientRepository.Update(client);
         }
 
-        public Client Delete(int id)
+        public async Task Delete(int id)
         {
-            return _clientRepository.Delete(id);
+            await _clientRepository.Delete(id);
         }
 
-        public Client GetById(int id)
+        public Task<Client> GetById(int id)
         {
             return _clientRepository.GetById(id);
         }
 
-        public IEnumerable<Client> GetAll()
+        public async Task<IEnumerable<Client>> GetAll()
         {
-            return _clientRepository.GetAll();
+            return await _clientRepository.GetAll();
         }
     }
 }

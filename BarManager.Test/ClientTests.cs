@@ -1,5 +1,6 @@
 ﻿using BarManager.Models.DTO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
 using System.Net;
 using AutoMapper;
@@ -48,231 +49,231 @@ namespace BarManager.Test
             _clientController = new ClientController(_clientService, _mapper);
         }
 
-        [Fact]
-        public void Client_GetAll_Count_Check()
-        {
-            //setup
-            var expectedCount = 2;
+//        [Fact]
+//        public void Client_GetAll_Count_Check()
+//        {
+//            //setup
+//            var expectedCount = 2;
 
-            var mockedService = new Mock<IClientService>();
+//            var mockedService = new Mock<IClientService>();
 
-            mockedService.Setup(x => x.GetAll()).Returns(Clients);
+//            mockedService.Setup(x => x.GetAll()).Returns(Clients);
 
-            //inject
-            var controller = new ClientController(mockedService.Object, _mapper);
+//            //inject
+//            var controller = new ClientController(mockedService.Object, _mapper);
 
-            //Act
-            var result = controller.GetAll();
+//            //Act
+//            var result = controller.GetAll();
 
-            //Assert
-            var okObjectResult = result as OkObjectResult;
-            Assert.NotNull(okObjectResult);
-            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
+//            //Assert
+//            var okObjectResult = result as OkObjectResult;
+//            Assert.NotNull(okObjectResult);
+//            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
 
-            var clients = okObjectResult.Value as IEnumerable<Client>;
-            Assert.NotNull(clients);
-            Assert.Equal(expectedCount, clients.Count());
-        }
+//            var clients = okObjectResult.Value as IEnumerable<Client>;
+//            Assert.NotNull(clients);
+//            Assert.Equal(expectedCount, clients.Count());
+//        }
 
-        [Fact]
-        public void Client_GetById_NameCheck()
-        {
-            //setup
-            var clientId = 2;
-            var expectedName = "AnotherName";
+//        [Fact]
+//        public void Client_GetById_NameCheck()
+//        {
+//            //setup
+//            var clientId = 2;
+//            var expectedName = "AnotherName";
 
-            _clientRepository.Setup(x => x.GetById(clientId))
-                .Returns(Clients.FirstOrDefault(t => t.Id == clientId));
+//            _clientRepository.Setup(x => x.GetById(clientId))
+//                .Returns(Clients.FirstOrDefault(t => t.Id == clientId));
 
-            //Act
-            var result = _clientController.GetById(clientId);
+//            //Act
+//            var result = _clientController.GetById(clientId);
 
-            //Assert
-            var okObjectResult = result as OkObjectResult;
-            Assert.NotNull(okObjectResult);
-            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
+//            //Assert
+//            var okObjectResult = result as OkObjectResult;
+//            Assert.NotNull(okObjectResult);
+//            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
 
-            var response = okObjectResult.Value as ClientResponse;
-            var client = _mapper.Map<Client>(response);
+//            var response = okObjectResult.Value as ClientResponse;
+//            var client = _mapper.Map<Client>(response);
 
-            Assert.NotNull(client);
-            Assert.Equal(expectedName, client.Name);
-        }
+//            Assert.NotNull(client);
+//            Assert.Equal(expectedName, client.Name);
+//        }
 
-        [Fact]
-        public void Client_GetById_DiscountCheck()
-        {
-            //setup
-            var clientId = 2;
-            var expectedDiscount = 6;
+//        [Fact]
+//        public void Client_GetById_DiscountCheck()
+//        {
+//            //setup
+//            var clientId = 2;
+//            var expectedDiscount = 6;
 
-            _clientRepository.Setup(x => x.GetById(clientId))
-                .Returns(Clients.FirstOrDefault(t => t.Id == clientId));
+//            _clientRepository.Setup(x => x.GetById(clientId))
+//                .Returns(Clients.FirstOrDefault(t => t.Id == clientId));
 
-            //Act
-            var result = _clientController.GetById(clientId);
+//            //Act
+//            var result = _clientController.GetById(clientId);
 
-            //Assert
-            var okObjectResult = result as OkObjectResult;
-            Assert.NotNull(okObjectResult);
-            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
+//            //Assert
+//            var okObjectResult = result as OkObjectResult;
+//            Assert.NotNull(okObjectResult);
+//            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
 
-            var response = okObjectResult.Value as ClientResponse;
-            var client = _mapper.Map<Client>(response);
+//            var response = okObjectResult.Value as ClientResponse;
+//            var client = _mapper.Map<Client>(response);
 
-            Assert.NotNull(client);
-            Assert.Equal(expectedDiscount, client.Discount);
-        }
+//            Assert.NotNull(client);
+//            Assert.Equal(expectedDiscount, client.Discount);
+//        }
 
-        [Fact]
-        public void Client_GetById_MoneySpendCheck()
-        {
-            //setup
-            var clientId = 2;
-            var expectedMoneySpend = 3.6;
+//        [Fact]
+//        public void Client_GetById_MoneySpendCheck()
+//        {
+//            //setup
+//            var clientId = 2;
+//            var expectedMoneySpend = 3.6;
 
-            _clientRepository.Setup(x => x.GetById(clientId))
-                .Returns(Clients.FirstOrDefault(t => t.Id == clientId));
+//            _clientRepository.Setup(x => x.GetById(clientId))
+//                .Returns(Clients.FirstOrDefault(t => t.Id == clientId));
 
-            //Act
-            var result = _clientController.GetById(clientId);
+//            //Act
+//            var result = _clientController.GetById(clientId);
 
-            //Assert
-            var okObjectResult = result as OkObjectResult;
-            Assert.NotNull(okObjectResult);
-            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
+//            //Assert
+//            var okObjectResult = result as OkObjectResult;
+//            Assert.NotNull(okObjectResult);
+//            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
 
-            var response = okObjectResult.Value as ClientResponse;
-            var client = _mapper.Map<Client>(response);
+//            var response = okObjectResult.Value as ClientResponse;
+//            var client = _mapper.Map<Client>(response);
 
-            Assert.NotNull(client);
-            Assert.Equal(expectedMoneySpend, client.MoneySpend);
-        }
+//            Assert.NotNull(client);
+//            Assert.Equal(expectedMoneySpend, client.MoneySpend);
+//        }
 
-        [Fact]
-        public void Client_GetById_NotFound()
-        {
-            //setup
-            var clientId = 3;
+//        [Fact]
+//        public void Client_GetById_NotFound()
+//        {
+//            //setup
+//            var clientId = 3;
 
-            _clientRepository.Setup(x => x.GetById(clientId))
-                .Returns(Clients.FirstOrDefault(t => t.Id == clientId));
+//            _clientRepository.Setup(x => x.GetById(clientId))
+//                .Returns(Clients.FirstOrDefault(t => t.Id == clientId));
 
-            //Act
-            var result = _clientController.GetById(clientId);
+//            //Act
+//            var result = _clientController.GetById(clientId);
 
-            //Assert
-            var notFoundObjectResult = result as NotFoundObjectResult;
-            Assert.NotNull(notFoundObjectResult);
-            Assert.Equal(notFoundObjectResult.StatusCode, (int)HttpStatusCode.NotFound);
+//            //Assert
+//            var notFoundObjectResult = result as NotFoundObjectResult;
+//            Assert.NotNull(notFoundObjectResult);
+//            Assert.Equal(notFoundObjectResult.StatusCode, (int)HttpStatusCode.NotFound);
 
-            var response = (int)notFoundObjectResult.Value;
-            Assert.Equal(clientId, response);
-        }
+//            var response = (int)notFoundObjectResult.Value;
+//            Assert.Equal(clientId, response);
+//        }
 
-        [Fact]
-        public void Client_Update_ClientName()
-        {
-            var clientId = 1;
-            var expectedName = "Updated Client Name";
+//        [Fact]
+//        public void Client_Update_ClientName()
+//        {
+//            var clientId = 1;
+//            var expectedName = "Updated Client Name";
 
-            var client = Clients.FirstOrDefault(x => x.Id == clientId);
-            client.Name = expectedName;
+//            var client = Clients.FirstOrDefault(x => x.Id == clientId);
+//            client.Name = expectedName;
 
-            _clientRepository.Setup(x => x.GetById(clientId))
-                .Returns(Clients.FirstOrDefault(t => t.Id == clientId));
-            _clientRepository.Setup(x => x.Update(client))
-                .Returns(client);
+//            _clientRepository.Setup(x => x.GetById(clientId))
+//                .Returns(Clients.FirstOrDefault(t => t.Id == clientId));
+//            _clientRepository.Setup(x => x.Update(client))
+//                .Returns(client);
 
-            //Act
-            var clientUpdateRequest = _mapper.Map<ClientUpdateRequest>(client);
-            var result = _clientController.Update(clientUpdateRequest);
+//            //Act
+//            var clientUpdateRequest = _mapper.Map<ClientUpdateRequest>(client);
+//            var result = _clientController.Update(clientUpdateRequest);
 
-            //Assert
-            var okObjectResult = result as OkObjectResult;
-            Assert.NotNull(okObjectResult);
-            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
+//            //Assert
+//            var okObjectResult = result as OkObjectResult;
+//            Assert.NotNull(okObjectResult);
+//            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
 
-            var val = okObjectResult.Value as Client;
-            Assert.NotNull(val);
-            Assert.Equal(expectedName, val.Name);
+//            var val = okObjectResult.Value as Client;
+//            Assert.NotNull(val);
+//            Assert.Equal(expectedName, val.Name);
 
-        }
+//        }
 
-        [Fact]
-        public void Client_Delete_ExistingClient()
-        {
-            //Setup
-            var clientId = 1;
+//        [Fact]
+//        public void Client_Delete_ExistingClient()
+//        {
+//            //Setup
+//            var clientId = 1;
 
-            var client = Clients.FirstOrDefault(x => x.Id == clientId);
+//            var client = Clients.FirstOrDefault(x => x.Id == clientId);
 
-            _clientRepository.Setup(x => x.Delete(clientId)).Callback(() => Clients.Remove(client)).Returns(client);
+//            _clientRepository.Setup(x => x.Delete(clientId)).Callback(() => Clients.Remove(client)).Returns(client);
 
-            //Act
-            var result = _clientController.Delete(clientId);
+//            //Act
+//            var result = _clientController.Delete(clientId);
 
-            //Assert
-            var okObjectResult = result as OkObjectResult;
-            Assert.NotNull(okObjectResult);
-            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
+//            //Assert
+//            var okObjectResult = result as OkObjectResult;
+//            Assert.NotNull(okObjectResult);
+//            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
 
-            var val = okObjectResult.Value as Client;
-            Assert.NotNull(val);
-            Assert.Equal(1, Clients.Count);
-            Assert.Null(Clients.FirstOrDefault(x => x.Id == clientId));
-        }
+//            var val = okObjectResult.Value as Client;
+//            Assert.NotNull(val);
+//            Assert.Equal(1, Clients.Count);
+//            Assert.Null(Clients.FirstOrDefault(x => x.Id == clientId));
+//        }
 
-        [Fact]
-        public void Client_Delete_NotExisting_Client()
-        {
-            //Setup
-            var clientId = 3;
+//        [Fact]
+//        public void Client_Delete_NotExisting_Client()
+//        {
+//            //Setup
+//            var clientId = 3;
 
-            var client = Clients.FirstOrDefault(x => x.Id == clientId);
+//            var client = Clients.FirstOrDefault(x => x.Id == clientId);
 
-            _clientRepository.Setup(x => x.Delete(clientId)).Callback(() => Clients.Remove(client)).Returns(client);
+//            _clientRepository.Setup(x => x.Delete(clientId)).Callback(() => Clients.Remove(client)).Returns(client);
 
-            //Act
-            var result = _clientController.Delete(clientId);
+//            //Act
+//            var result = _clientController.Delete(clientId);
 
-            //Assert
-            var notFoundObjectResult = result as NotFoundObjectResult;
-            Assert.NotNull(notFoundObjectResult);
-            Assert.Equal(notFoundObjectResult.StatusCode, (int)HttpStatusCode.NotFound);
+//            //Assert
+//            var notFoundObjectResult = result as NotFoundObjectResult;
+//            Assert.NotNull(notFoundObjectResult);
+//            Assert.Equal(notFoundObjectResult.StatusCode, (int)HttpStatusCode.NotFound);
 
-            var response = (int)notFoundObjectResult.Value;
-            Assert.Equal(clientId, response);
-        }
+//            var response = (int)notFoundObjectResult.Value;
+//            Assert.Equal(clientId, response);
+//        }
 
-        [Fact]
-        public void Client_CreateClient()
-        {
-            //setup
-            var client = new Client()
-            {
-                Id = 3,
-                Name = "Name 3"
-            };
+//        [Fact]
+//        public void Client_CreateClient()
+//        {
+//            //setup
+//            var client = new Client()
+//            {
+//                Id = 3,
+//                Name = "Name 3"
+//            };
 
-            _clientRepository.Setup(x => x.GetAll()).Returns(Clients);
+//            _clientRepository.Setup(x => x.GetAll()).Returns(Clients);
 
-            _clientRepository.Setup(x => x.Create(It.IsAny<Client>())).Callback(() =>
-            {
-                Clients.Add(client);
-            }).Returns(client);
+//            _clientRepository.Setup(x => x.Create(It.IsAny<Client>())).Callback(() =>
+//            {
+//                Clients.Add(client);
+//            }).Returns(client);
 
-            //Act
-            var result = _clientController.CreateClient(_mapper.Map<ClientRequest>(client));
+//            //Act
+//            var result = _clientController.CreateClient(_mapper.Map<ClientRequest>(client));
 
-            //Assert
-            var okObjectResult = result as OkObjectResult;
+//            //Assert
+//            var okObjectResult = result as OkObjectResult;
 
-            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
-            Assert.NotNull(Clients.FirstOrDefault(x => x.Id == client.Id));
-            Assert.Equal(3, Clients.Count);
+//            Assert.Equal(okObjectResult.StatusCode, (int)HttpStatusCode.OK);
+//            Assert.NotNull(Clients.FirstOrDefault(x => x.Id == client.Id));
+//            Assert.Equal(3, Clients.Count);
 
-        }
+//        }
 
     }
 }

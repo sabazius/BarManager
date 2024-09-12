@@ -3,6 +3,7 @@ using BarManager.Models.Common;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Client = BarManager.Models.DTO.Client;
 
 namespace BarManager.DL.Repositories.Mongo
@@ -19,35 +20,37 @@ namespace BarManager.DL.Repositories.Mongo
             _clientCollection = database.GetCollection<Client>("Clients");
         }
 
-        public Client Create(Client client)
+        public async Task<Client> Create(Client userPosition)
         {
-            _clientCollection.InsertOne(client);
+            await _clientCollection.InsertOneAsync(userPosition);
 
+            return userPosition;
+        }
+
+        public async Task <Client> Update(Client client)
+        {
+            await _clientCollection.ReplaceOneAsync(clientToReplace => clientToReplace.Id == client.Id, client);
             return client;
         }
 
-        public Client Update(Client client)
+        public async Task Delete(int id)
         {
-            _clientCollection.ReplaceOne(clientToReplace => clientToReplace.Id == client.Id, client);
-            return client;
+            await _clientCollection.DeleteOneAsync(client => client.Id == id);
+
         }
 
-        public Client Delete(int id)
+        public async Task<Client> GetById(int id)
         {
-            var client = GetById(id);
-            _clientCollection.DeleteOne(client => client.Id == id);
+            var result = await _clientCollection.FindAsync(userPosition => userPosition.Id == id);
 
-            return client;
+            return result.FirstOrDefault();
         }
 
-        public Client GetById(int id)
+        public async Task<IEnumerable<Client>> GetAll()
         {
-            return _clientCollection.Find(client => client.Id == id).FirstOrDefault();
-        }
+            var result = await _clientCollection.FindAsync(client => true);
 
-        public IEnumerable<Client> GetAll()
-        {
-            return _clientCollection.Find(client => true).ToList();
+            return result.ToEnumerable();
         }
     }
 }

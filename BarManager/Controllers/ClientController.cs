@@ -4,6 +4,8 @@ using BarManager.Models.DTO;
 using BarManager.Models.Requests;
 using BarManager.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BarManager.Controllers
 {
@@ -21,19 +23,23 @@ namespace BarManager.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task <IActionResult> GetAll()
         {
-            var result = _clientService.GetAll();
+            var result = await _clientService.GetAll();
 
-            return Ok(result);
+            var response = _mapper.Map<IEnumerable<ClientResponse>>(result);
+
+            if(response != null) return Ok(response);
+
+            return NoContent();
         }
 
         [HttpGet("GetById")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             if (id <= 0) return BadRequest();
 
-            var result = _clientService.GetById(id);
+            var result = await _clientService.GetById(id);
 
             if (result == null) return NotFound(id);
 
@@ -43,41 +49,40 @@ namespace BarManager.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult CreateClient([FromBody] ClientRequest clientRequest)
+        public async Task<IActionResult> CreateClient([FromBody] ClientRequest clientRequest)
         {
             if (clientRequest == null) return BadRequest();
 
             var client = _mapper.Map<Client>(clientRequest);
 
-            var result = _clientService.Create(client);
+            var result = await _clientService.Create(client);
 
             return Ok(client);
         }
 
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0) return BadRequest(id);
 
-            var result = _clientService.Delete(id);
+            await _clientService.Delete(id);
+;
 
-            if (result == null) return NotFound(id);
-
-            return Ok(result);
+            return Ok();
         }
 
         [HttpPost("Update")]
-        public IActionResult Update([FromBody] ClientUpdateRequest clientRequest)
+        public async Task<IActionResult> Update([FromBody] ClientUpdateRequest clientRequest)
         {
             if (clientRequest == null) return BadRequest();
 
-            var searchClient = _clientService.GetById(clientRequest.Id);
+            var searchClient = await _clientService.GetById(clientRequest.Id);
 
             if (searchClient == null) return NotFound(clientRequest.Id);
 
             searchClient.Name = clientRequest.Name;
 
-            var result = _clientService.Update(searchClient);
+            var result = await _clientService.Update(searchClient);
 
             return Ok(result);
         }

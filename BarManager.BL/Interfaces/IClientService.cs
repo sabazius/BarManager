@@ -1,18 +1,19 @@
 ﻿using BarManager.Models.DTO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BarManager.BL.Interfaces
 {
     public interface IClientService
     {
-        Client Create(Client client);
+        Task<Client> Create(Client client);
 
-        Client Update(Client client);
+        Task<Client> Update(Client client);
 
-        Client Delete(int id);
+        Task Delete(int id);
 
-        Client GetById(int id);
+        Task<Client> GetById(int id);
 
-        IEnumerable<Client> GetAll();
+        Task<IEnumerable<Client>> GetAll();
     }
 }
