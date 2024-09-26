@@ -4,6 +4,7 @@ using BarManager.Models.DTO;
 using BarManager.Models.Requests;
 using BarManager.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BarManager.Controllers
 {
@@ -21,54 +22,52 @@ namespace BarManager.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll() 
+        public async Task<IActionResult> GetAll() 
         {
-            var result = _shiftService.GetAll();
+            var result = await _shiftService.GetAll();
 
             return Ok(result);
             
         }
 
         [HttpGet("GetByID")]
-        public IActionResult GetById(int Id)
+        public async Task<IActionResult> GetById(int Id)
         {
             if (Id <= 0) return BadRequest();
 
-            var result = _shiftService.GetById(Id);
+            var result = await _shiftService.GetById(Id);
 
             if (result == null) return NotFound(Id);
 
-            var response = _mapper.Map<ShiftResponse>(result);
+            var response =  _mapper.Map<ShiftResponse>(result);
 
             return Ok(response);
         }
 
         [HttpPost("Create")]
-        public IActionResult CreateShift([FromBody] ShiftRequest shiftRequest)
+        public async Task<IActionResult> CreateShift([FromBody] ShiftRequest shiftRequest)
         {
             if (shiftRequest == null) return BadRequest();
 
             var shift = _mapper.Map<Shift>(shiftRequest);
 
-            var result = _shiftService.Create(shift);
+            var result = await _shiftService.Create(shift);
 
             return Ok(result);
         }
 
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0) return BadRequest(id);
 
-            var result = _shiftService.Delete(id);
+             await _shiftService.Delete(id);
 
-            if (result == null) return NotFound(id);
-
-            return Ok(result);
+            return Ok();
         }
 
         [HttpPost("Update")]
-        public IActionResult Update([FromBody] Shift shift)
+        public async Task<IActionResult> Update([FromBody] Shift shift)
         {
             if (shift == null) return BadRequest();
 
@@ -76,7 +75,7 @@ namespace BarManager.Controllers
 
             if (searchShift == null ) return NotFound();
 
-            var result = _shiftService.Update(shift);
+            var result = await _shiftService.Update(shift);
 
             return Ok(result);
 

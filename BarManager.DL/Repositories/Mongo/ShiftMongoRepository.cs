@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BarManager.Models.Common;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System.Threading.Tasks;
 
 namespace BarManager.DL.Repositories.Mongo
 {
@@ -20,35 +21,37 @@ namespace BarManager.DL.Repositories.Mongo
             _shiftCollection = database.GetCollection<Shift>("Shifts");
         }
 
-        public Shift Create(Shift shift)
+        public async Task<Shift> Create(Shift shift)
         {
-            _shiftCollection.InsertOne(shift);
+            await _shiftCollection.InsertOneAsync(shift);
 
             return shift;
         }
 
-        public Shift Delete(int id)
+        public async Task<IEnumerable<Shift>> GetAll()
         {
-            var shift = GetById(id);
-            _shiftCollection.DeleteOne(shift => shift.Id == id);
+            var result = await _shiftCollection.FindAsync(shift => true);
+            return result.ToList();
+        }
 
+        public async Task<Shift> GetById(int id)
+        {
+            var result = await _shiftCollection.FindAsync(shift => shift.Id == id);
+            return result.FirstOrDefault();
+        }
+
+        public async Task<Shift> Update(Shift shift)
+        {
+            await _shiftCollection.ReplaceOneAsync(shiftToReplace => shiftToReplace.Id == shift.Id, shift);
             return shift;
         }
 
-        public IEnumerable<Shift> GetAll()
+        public async Task Delete(int id)
         {
-            return _shiftCollection.Find(shift => true).ToList();
-        }
+ 
+            await _shiftCollection.DeleteOneAsync(shift => shift.Id == id);
 
-        public Shift GetById(int id)
-        {
-            return _shiftCollection.Find(shift => shift.Id == id).FirstOrDefault();
-        }
-
-        public Shift Update(Shift shift)
-        {
-            _shiftCollection.ReplaceOne(shiftToReplace => shiftToReplace.Id == shift.Id, shift);
-            return shift;
+            
         }
     }
 }

@@ -3,6 +3,7 @@ using BarManager.DL.Interfaces;
 using BarManager.Models.DTO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BarManager.BL.Services
 {
@@ -14,35 +15,35 @@ namespace BarManager.BL.Services
             _shiftRepository = shiftRepository;
         }
 
-        public Shift Create(Shift shift)
+        public async Task<Shift> Create(Shift shift)
         {
-            var index = _shiftRepository.GetAll().OrderByDescending(x => x.Id).FirstOrDefault()?.Id;
+            var result = await _shiftRepository.GetAll();
+
+            var index = result.OrderByDescending(x => x.Id).FirstOrDefault()?.Id;
 
             shift.Id = (int)(index != null ? index + 1 : 1);
 
-            return _shiftRepository.Create(shift);
+            return await _shiftRepository.Create(shift);
         } 
-        public Shift Update(Shift shift)
+        public async Task<Shift> Update(Shift shift)
         {
-            return _shiftRepository.Update(shift);
+            return await _shiftRepository.Update(shift);
         }
-        public Shift GetById(int id)
+        public async Task<Shift> GetById(int id)
         {
-            return _shiftRepository.GetById(id);
-        }
-
-        public Shift Delete(int id)
-        {
-            return _shiftRepository.Delete(id);
+            return await _shiftRepository.GetById(id);
         }
 
-        public IEnumerable<Shift> GetAll()
+        public async Task Delete(int id)
         {
-            return _shiftRepository.GetAll();
+            await _shiftRepository.Delete(id);
+        }
+
+        public async Task<IEnumerable<Shift>> GetAll()
+        {
+            return await _shiftRepository.GetAll();
         }
 
         
-
-       
     }
 }

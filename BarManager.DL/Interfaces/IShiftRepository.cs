@@ -1,18 +1,19 @@
 ﻿using BarManager.Models.DTO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BarManager.DL.Interfaces
 {
     public interface IShiftRepository
     {
-        Shift Create(Shift shift);
+        Task<Shift> Create(Shift shift);
 
-        Shift Update(Shift shift);
+        Task<Shift> Update(Shift shift);
 
-        Shift Delete(int id);
+        Task Delete(int id);
 
-        Shift GetById(int id);
+        Task<Shift> GetById(int id);
 
-        IEnumerable<Shift> GetAll();
+        Task<IEnumerable<Shift>> GetAll();
     }
 }
